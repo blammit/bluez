@@ -746,8 +746,9 @@ int adapter_set_name(struct btd_adapter *adapter, const char *name)
 		if (err < 0)
 			return err;
 	} else {
-		g_free(adapter->name);
-		adapter->name = g_strdup(maxname);
+		/* There won't be any HCI response to trigger a name
+		   change signal when adapter is down, so force it */
+		adapter_name_changed(adapter, maxname);
 	}
 
 	write_local_name(&adapter->bdaddr, maxname);
